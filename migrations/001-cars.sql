@@ -51,7 +51,7 @@ CREATE TABLE Car (
     details TEXT,
     price INTEGER,
     photoUrl TEXT
-)
+);
 INSERT INTO Car (
         make,
         model,
