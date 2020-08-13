@@ -5,7 +5,7 @@ CREATE TABLE FAQ(
     answer TEXT,
     createDate DATE
 );
-INSERT INTO FAQ(question, answer, createDate)
+INSERT INTO FAQ (question, answer, createDate)
 values(
         'How to be safe buying online?',
         'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempo',
