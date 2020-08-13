@@ -421,7 +421,7 @@ INSERT INTO Car (
         price,
         photoUrl,
         details
-    )
+    );
 values(
         'Volkswagen',
         'EOS',
