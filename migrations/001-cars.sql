@@ -3,44 +3,45 @@ CREATE TABLE FAQ(
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     question TEXT,
     answer TEXT,
-    createDate DATE
+    createdDate DATE
 );
-INSERT INTO FAQ (question, answer, createDate)
+INSERT INTO FAQ (question, answer, createdDate)
 values(
         'How to be safe buying online?',
         'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempo',
         DATE('2019-11-01')
     );
-INSERT INTO FAQ (question, answer, createDate)
+INSERT INTO FAQ (question, answer, createdDate)
 values(
         'Do I have any assurance on my new car?',
         'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempo',
         DATE('2020-11-01')
     );
-INSERT INTO FAQ (question, answer, createDate)
+INSERT INTO FAQ (question, answer, createdDate)
 values(
         'How many kilometers a normal car can have?',
         'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempo',
         DATE('2018-11-01')
     );
-INSERT INTO FAQ (question, answer, createDate)
+INSERT INTO FAQ (question, answer, createdDate)
 values(
         'What is the best month to buy a car?',
         'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempo',
         DATE('2018-11-01')
     );
-INSERT INTO FAQ (question, answer, createDate)
+INSERT INTO FAQ (question, answer, createdDate)
 values(
         'How to know the car history?',
         'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempo',
         DATE('2018-11-01')
     );
-INSERT INTO FAQ (question, answer, createDate)
+INSERT INTO FAQ (question, answer, createdDate)
 values(
         'How much do I pay a month to use the service?',
         'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempo',
         DATE('2018-11-01')
     );
+--CAR    
 CREATE TABLE Car (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     make TEXT,
@@ -421,7 +422,7 @@ INSERT INTO Car (
         price,
         photoUrl,
         details
-    );
+    )
 values(
         'Volkswagen',
         'EOS',

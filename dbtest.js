@@ -10,7 +10,7 @@ async function setup() {
 //   console.log(db);
     if (db) {
       await db.migrate({ force: "last" });
-      const faq = await db.all("SELECT * FROM FAQ ORDER BY createDate DESC");
+      const faq = await db.all("SELECT * FROM FAQ ORDER BY createdDate DESC");
       const cars = await db.all("SELECT * FROM Car");
       console.log(faq);
     }
