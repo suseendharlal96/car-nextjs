@@ -79,12 +79,16 @@ const CarDetails = ({ car }: CarDetailsProps) => {
   );
 };
 
-export const getStaticProps: GetStaticProps = async ({ params: { id } }) => {
+export const getStaticProps: GetStaticProps = async ({
+  params: { id, model, brand },
+}) => {
   console.log("id", id);
   const db = await connectDB();
   const car = await db.get<CarModel | undefined>(
-    "SELECT * FROM Car WHERE id=?",
-    id
+    "SELECT * FROM Car WHERE id=? AND make=? AND model=?",
+    id,
+    brand,
+    model
   );
   return { props: { car: car || null }, revalidate: 1 };
 };
