@@ -64,7 +64,7 @@ INSERT INTO Car (
         details
     )
 values(
-        'Audi',
+        'Audiiiiii',
         'A2',
         2003,
         123456,

@@ -39,9 +39,9 @@ const Nav = () => {
         </Button>
 
         <Button color="inherit">
-          <Link href="/add-comment">
+          <Link href="/faq">
             <a style={{ color: "white" }}>
-              <Typography color="inherit">Add Comment</Typography>
+              <Typography color="inherit">FAQ</Typography>
             </a>
           </Link>
         </Button>
