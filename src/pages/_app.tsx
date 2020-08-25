@@ -8,6 +8,7 @@ import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
 import axios from "axios";
 import { SWRConfig } from "swr";
 import Nav from "../components/Nav";
+import "../components/layout.css";
 
 axios.defaults.baseURL = "http://localhost:4001";
 

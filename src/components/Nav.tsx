@@ -32,16 +32,16 @@ const Nav = () => {
 
         <Button color="inherit">
           <Link href="/">
-            <a style={{ color: "white" }}>
-              <Typography color="inherit">Home</Typography>
+            <a>
+              <Typography>Home</Typography>
             </a>
           </Link>
         </Button>
 
         <Button color="inherit">
           <Link href="/faq">
-            <a style={{ color: "white" }}>
-              <Typography color="inherit">FAQ</Typography>
+            <a>
+              <Typography>FAQ</Typography>
             </a>
           </Link>
         </Button>

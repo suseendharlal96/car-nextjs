@@ -1,0 +1,15 @@
+body {
+  height: 100vh;
+  background: linear-gradient(to bottom right, red, yellow);
+}
+a {
+  text-decoration: none;
+  color: #ffffff;
+}
+a:active,
+:visited {
+  color: greenyellow;
+}
+a:hover {
+  color: red;
+}

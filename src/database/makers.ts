@@ -1,8 +1,8 @@
 import { connectDB } from "../connectDB";
 
 export interface Makers {
-  makers: String;
-  count: Number;
+  make: string;
+  count: number;
 }
 
 export const getMakers = async () => {
