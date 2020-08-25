@@ -1,10 +1,8 @@
 import React from "react";
 import { GetServerSideProps } from "next";
-import { useRouter } from "next/router";
+import router, { useRouter } from "next/router";
 
-import { Form, Formik, Field } from "formik";
-
-import { Makers, getMakers } from "../database/makers";
+import { Form, Formik, Field, useField, useFormikContext } from "formik";
 import {
   Paper,
   Grid,
@@ -14,7 +12,14 @@ import {
   MenuItem,
   makeStyles,
   GridList,
+  SelectProps,
+  Button,
 } from "@material-ui/core";
+
+import { Makers, getMakers } from "../database/getMakers";
+import { Models, getModels } from "../database/getModels";
+import { getParamAsStrings } from "../../getParamAsString";
+import useSWR from "swr";
 const useStyles = makeStyles((theme) => ({
   formControl: {
     margin: theme.spacing(1),
@@ -38,24 +43,39 @@ const useStyles = makeStyles((theme) => ({
 
 interface HomeProps {
   makers: Makers[];
+  models: Models[];
 }
 
 const prices = [5000, 10000, 15000, 20000, 50000, 100000];
-const Index = ({ makers }: HomeProps) => {
+const Index = ({ makers, models }: HomeProps) => {
+  console.log(models);
   const router = useRouter();
   const classes = useStyles();
   console.log(router.query);
   const initialValues = {
-    myMaker: router.query.manufacturer || "all",
-    myModel: router.query.model || "all",
-    myMinPrice: router.query.minPrice || "all",
-    myMaxPrice: router.query.maxPrice || "all",
+    maker: router.query.maker || "all",
+    model: router.query.model || "all",
+    minPrice: router.query.minPrice || "all",
+    maxPrice: router.query.maxPrice || "all",
   };
   return (
-    <Formik initialValues={initialValues} onSubmit={() => {}}>
+    <Formik
+      initialValues={initialValues}
+      onSubmit={(values) => {
+        router.push(
+          {
+            pathname: "/",
+            query: { ...values, page: 1 },
+          },
+          undefined,
+          { shallow: true }
+        );
+      }}
+    >
       {(values) => (
         <Form>
           <Paper elevation={5} className={classes.paper}>
+            <h2 style={{ textAlign: "center" }}>Select your Specifications</h2>
             <GridList cellHeight={160} className={classes.gridList} cols={3}>
               <Grid item xs={12} sm={6} md={6}>
                 {" "}
@@ -64,15 +84,15 @@ const Index = ({ makers }: HomeProps) => {
                   variant="outlined"
                   className={classes.formControl}
                 >
-                  <InputLabel id="search-makers">Makers</InputLabel>
+                  <InputLabel id="search-makers">Brand</InputLabel>
                   <Field
-                    name="myMaker"
+                    name="maker"
                     as={Select}
                     labelId="search-makers"
                     id="search-makers"
                     // value={age}
                     // onChange={handleChange}
-                    label="Makers"
+                    label="Brand"
                   >
                     <MenuItem disabled value="all">
                       <em>All makers</em>
@@ -88,28 +108,11 @@ const Index = ({ makers }: HomeProps) => {
                 </FormControl>
               </Grid>
               <Grid item xs={12} sm={6} md={6}>
-                <FormControl
-                  fullWidth
-                  variant="outlined"
-                  className={classes.formControl}
-                >
-                  <InputLabel id="search-makers">Models</InputLabel>
-                  <Field
-                    as={Select}
-                    labelId="search-models"
-                    id="search-models"
-                    // value={age}
-                    // onChange={handleChange}
-                    label="Models"
-                  >
-                    <MenuItem value="all">
-                      <em>All Models</em>
-                    </MenuItem>
-                    <MenuItem value={10}>Ten</MenuItem>
-                    <MenuItem value={20}>Twenty</MenuItem>
-                    <MenuItem value={30}>Thirty</MenuItem>
-                  </Field>
-                </FormControl>
+                <SelectCarModel
+                  name="model"
+                  maker={getParamAsStrings(values.values.maker)}
+                  models={models}
+                />
               </Grid>
               <Grid item xs={12} sm={6} md={6}>
                 <FormControl
@@ -120,7 +123,7 @@ const Index = ({ makers }: HomeProps) => {
                   <InputLabel id="search-makers">Min Price</InputLabel>
                   <Field
                     as={Select}
-                    name="myMinPrice"
+                    name="minPrice"
                     labelId="search-min-price"
                     id="search-min-price"
                     // value={age}
@@ -146,7 +149,7 @@ const Index = ({ makers }: HomeProps) => {
                 >
                   <InputLabel id="search-max-price">Max price</InputLabel>
                   <Field
-                    name="myMaxPrice"
+                    name="maxPrice"
                     as={Select}
                     labelId="search-max-price"
                     id="search-max-price"
@@ -166,6 +169,9 @@ const Index = ({ makers }: HomeProps) => {
                 </FormControl>
               </Grid>
             </GridList>
+            <Button type="submit" variant="contained" fullWidth color="primary">
+              Apply your Specifications
+            </Button>
           </Paper>
         </Form>
       )}
@@ -173,10 +179,65 @@ const Index = ({ makers }: HomeProps) => {
   );
 };
 
-export const getServerSideProps: GetServerSideProps = async () => {
-  const makers = await getMakers();
+export interface SelectCarModelProps extends SelectProps {
+  name: string;
+  models: Models[];
+  maker: string;
+}
+
+export function SelectCarModel({
+  models,
+  maker,
+  ...props
+}: SelectCarModelProps) {
+  const { setFieldValue } = useFormikContext();
+  const classes = useStyles();
+
+  const [field] = useField({
+    name: props.name,
+  });
+  console.log(maker);
+
+  const { data } = useSWR<Models[]>("/api/getModels/?manufacturer=" + maker, {
+    onSuccess: (newValues) => {
+      if (!newValues.map((val) => val.model).includes(field.value)) {
+        setFieldValue("model", "all");
+      }
+    },
+  });
+  const updatedModels = data || models;
+
+  return (
+    <FormControl fullWidth variant="outlined" className={classes.formControl}>
+      <InputLabel id="search-makers">Models</InputLabel>
+      <Select
+        name="model"
+        labelId="search-models"
+        id="search-models"
+        label="Models"
+        {...field}
+        {...props}
+      >
+        <MenuItem disabled value="all">
+          <em>All Models</em>
+        </MenuItem>
+        {updatedModels.map((model) => {
+          return (
+            <MenuItem key={model.model} value={model.model}>
+              {model.model + "(" + model.count + ")"}
+            </MenuItem>
+          );
+        })}
+      </Select>
+    </FormControl>
+  );
+}
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const maker = getParamAsStrings(context.query.maker);
+
+  const [makers, models] = await Promise.all([getMakers(), getModels(maker)]);
   return {
-    props: { makers },
+    props: { makers, models },
   };
 };
 

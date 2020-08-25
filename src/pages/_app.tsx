@@ -10,14 +10,11 @@ import { SWRConfig } from "swr";
 import Nav from "../components/Nav";
 import "../components/layout.css";
 
-axios.defaults.baseURL = "http://localhost:4001";
+axios.defaults.baseURL = "http://localhost:3000";
 
 // Create a theme instance.
 export const theme = createMuiTheme({
   palette: {
-    primary: {
-      main: "#000",
-    },
     error: {
       main: red.A400,
     },
